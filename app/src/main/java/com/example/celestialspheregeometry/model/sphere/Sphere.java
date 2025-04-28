@@ -3,8 +3,9 @@ package com.example.celestialspheregeometry.model.sphere;
 import android.content.Context;
 import android.opengl.Matrix;
 
-import com.example.celestialspheregeometry.model.sphere.elements.Circle;
+import com.example.celestialspheregeometry.model.sphere.elements.astronomy.SphereCircle;
 import com.example.celestialspheregeometry.model.sphere.elements.GeometricElement;
+import com.example.celestialspheregeometry.model.utils.math.MathUtils;
 import com.example.celestialspheregeometry.model.utils.math.Point;
 import com.example.celestialspheregeometry.model.utils.math.Vector;
 import com.example.celestialspheregeometry.rendering.SphereGLRenderer;
@@ -25,47 +26,58 @@ public class Sphere {
     public final List<GeometricElement> elements = new ArrayList<>();
     public final Context context;
 
+    public float[] modelMatrix = new float[16];
+    public float[] sphereCordsMatrix = new float[16];
+    public float[] resModelMatrix = new float[16];
+
 
     public Sphere(Context context, Point center, Vector axis, float r) {
         this.center = center; this.rotationAxis = axis; this.radius = r;
         this.context = context;
-        createMeridians();
-        createParallels();
+
+        Matrix.setIdentityM(modelMatrix, 0);
+        Matrix.translateM(modelMatrix, 0, getCenter().getX(), getCenter().getY(), getCenter().getZ());
+        Matrix.scaleM(modelMatrix, 0, radius, radius, radius);
+
+        Matrix.setIdentityM(sphereCordsMatrix, 0);
+        MathUtils.rotateBetweenVecs(sphereCordsMatrix, new Vector(0, 1, 0), rotationAxis);
+
+        createMeridians(6);
+        createParallels(5);
     }
 
 
-    public void draw(SphereGLRenderer sphereGLRenderer, float[] rotationMatrix) {
+    public void rotateAroundAxis(Vector axis, float angle) {
+        MathUtils.rotateV(rotationAxis, angle, axis.getX(), axis.getY(), axis.getZ());
+        Matrix.rotateM(modelMatrix, 0, angle, axis.getX(), axis.getY(), axis.getZ());
+    }
+
+
+    public void draw(SphereGLRenderer sphereGLRenderer) {
+        Matrix.multiplyMM(resModelMatrix, 0, modelMatrix, 0, sphereCordsMatrix, 0);
         for (GeometricElement circle: elements) {
-            circle.draw(sphereGLRenderer, rotationMatrix);
+            circle.draw(sphereGLRenderer, resModelMatrix);
         }
     }
 
 
-    public void createMeridians() {
-        int k = 6;
+    public void createMeridians(int k) {
         float step = 180f / k;
+        float[] rotMatrix = new float[16];
         for (int i = 0; i < k; i++) {
-            float[] vec = new float[]{-rotationAxis.getY(), rotationAxis.getX(), 0, 0};
-            float[] rotMatrix = new float[16];
+            float[] vec = new float[]{0, 0, -1, 0};
             float angle = i*step;
             System.out.println(angle);
-            Matrix.setRotateM(rotMatrix, 0, angle, rotationAxis.getX(), rotationAxis.getY(), rotationAxis.getZ());
+            Matrix.setRotateM(rotMatrix, 0, angle, 0, 1, 0);
             Matrix.multiplyMV(vec, 0, rotMatrix, 0, vec, 0);
-            elements.add(new Circle(context, new Point(center), new Vector(vec[0], vec[1], vec[2]), radius));
+            elements.add(new SphereCircle(context, new Vector(vec[0], vec[1], vec[2]), 0));
         }
     }
 
 
-    public void createParallels() {
-        int k = 5;
-        for (float a = 180f*k/(k+1) - 90; a > -90f; a -= 180f/(k+1)) {
-            float r = (float)(radius*Math.cos(Math.toRadians(a)));
-            float d = (float)(radius*Math.sin(Math.toRadians(a)));
-            elements.add(new Circle(context,
-                                    new Point(center.getX() + rotationAxis.getX() * d,
-                                            center.getY() + rotationAxis.getY() * d,
-                                            center.getZ() + rotationAxis.getZ() * d),
-                                    new Vector(rotationAxis), r));
+    public void createParallels(int k) {
+        for (float shift = 180f*k/(k+1) - 90; shift > -90f; shift -= 180f/(k+1)) {
+            elements.add(new SphereCircle(context, new Vector(0, 1, 0), shift));
         }
     }
 }

@@ -9,9 +9,7 @@ import android.os.SystemClock;
 
 import com.example.celestialspheregeometry.model.utils.math.Point;
 import com.example.celestialspheregeometry.model.utils.math.Vector;
-
 import java.nio.FloatBuffer;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -24,6 +22,7 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
     private final float[] viewMatrix = new float[16];
     private final float[] projectionMatrix = new float[16];
     private final float[] VPMatrix = new float[16];
+    private final float[] MVPMatrix = new float[16];
 
     SphereScene sphereScene;
 
@@ -69,16 +68,14 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glEnableVertexAttribArray(0);
         GLES20.glVertexAttribPointer(0, 3, GLES20.GL_FLOAT, false, 0, vertexBuffer);
 
-        int VPMatrixLocation = GLES20.glGetUniformLocation(program, "VPMatrix");
-        GLES20.glUniformMatrix4fv(VPMatrixLocation, 1, false, VPMatrix, 0);
+        Matrix.multiplyMM(MVPMatrix, 0, VPMatrix, 0, MMatrix, 0);
 
-        int MMatrixLocation = GLES20.glGetUniformLocation(program, "MMatrix");
-        GLES20.glUniformMatrix4fv(MMatrixLocation, 1, false, MMatrix, 0);
+        int VPMatrixLocation = GLES20.glGetUniformLocation(program, "MVPMatrix");
+        GLES20.glUniformMatrix4fv(VPMatrixLocation, 1, false, MVPMatrix, 0);
 
         GLES20.glLineWidth(5.0f);
         GLES20.glDrawArrays(GLES20.GL_LINE_LOOP, 0, points);
 
         GLES20.glDisableVertexAttribArray(0);
     }
-
 }

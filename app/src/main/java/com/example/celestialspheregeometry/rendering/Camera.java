@@ -21,6 +21,7 @@ public class Camera {
                 viewCenter.getZ(), up.getX(), up.getY(), up.getZ());
     }
 
+
     public static void updateViewProjMatrix(float[] VPMatrix, float[] viewMatrix, float[] projectionMatrix) {
         Matrix.multiplyMM(VPMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
     }

@@ -38,4 +38,8 @@ public class Vector {
     public float[] toFloatArray() {
         return new float[]{x, y, z};
     }
+
+    public float[] to4FloatArray() {
+        return new float[]{x, y, z, 0};
+    }
 }

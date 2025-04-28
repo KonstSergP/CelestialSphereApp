@@ -12,28 +12,24 @@ import com.example.celestialspheregeometry.model.utils.math.Vector;
 public class SphereScene {
 
     Sphere sphere;
+    float prevTime = (float)(SystemClock.uptimeMillis() % 10000) / 10000;
 
-    float[] rotationMatrix = new float[16];
 
     public SphereScene(Context context)
     {
-        sphere = new Sphere(context, new Point(0, 0, -4), new Vector(1, 1, 1, true), 2);
+        sphere = new Sphere(context, new Point(0, 0, -6), new Vector(1, 1, -0.5f, true), 2);
     }
+
 
     public void update()
     {
         float time = (float)(SystemClock.uptimeMillis() % 10000) / 10000;
-        float angle = time * 360;
-
-        Matrix.setIdentityM(rotationMatrix, 0);
-        Matrix.translateM(rotationMatrix, 0, sphere.getCenter().getX(), sphere.getCenter().getY(), sphere.getCenter().getZ());
-        Matrix.rotateM(rotationMatrix, 0, angle, sphere.getRotationAxis().getX(), sphere.getRotationAxis().getY(), sphere.getRotationAxis().getZ());
-        Matrix.translateM(rotationMatrix, 0, -sphere.getCenter().getX(), -sphere.getCenter().getY(), -sphere.getCenter().getZ());
-
+        float angle = (time - prevTime) * 360; prevTime = time;
+        sphere.rotateAroundAxis(sphere.getRotationAxis(), angle);
     }
 
-    public void draw(SphereGLRenderer sphereGLRenderer)
-    {
-        sphere.draw(sphereGLRenderer, rotationMatrix);
+
+    public void draw(SphereGLRenderer sphereGLRenderer) {
+        sphere.draw(sphereGLRenderer);
     }
 }
