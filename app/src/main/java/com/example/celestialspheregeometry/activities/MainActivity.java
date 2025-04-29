@@ -2,6 +2,9 @@ package com.example.celestialspheregeometry.activities;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.celestialspheregeometry.controller.sphere.SphereController;
+import com.example.celestialspheregeometry.model.sphere.SphereScene;
 import com.example.celestialspheregeometry.rendering.SphereGLSurfaceView;
 
 
@@ -13,7 +16,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        glSurfaceView = new SphereGLSurfaceView(this);
+        SphereController sphereController = new SphereController(this);
+        glSurfaceView = new SphereGLSurfaceView(this, sphereController);
+
         setContentView(glSurfaceView);
     }
 

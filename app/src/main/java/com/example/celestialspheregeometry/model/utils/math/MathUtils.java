@@ -10,6 +10,12 @@ public class MathUtils {
         dest[2] = first[0] * second[1] - first[1] * second[0];
     }
 
+    public static Vector cross(Vector first, Vector second) {
+        float[] dest = new float[3];
+        cross(first.toFloatArray(), second.toFloatArray(), dest);
+        return new Vector(dest[0], dest[1], dest[2]);
+    }
+
     public static float norm(float[] vec) {
         return (float) Math.sqrt(vec[0]*vec[0] + vec[1]*vec[1] + vec[2]*vec[2]);
     }

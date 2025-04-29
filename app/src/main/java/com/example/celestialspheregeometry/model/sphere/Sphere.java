@@ -87,4 +87,8 @@ public class Sphere {
             elements.add(new SphereCircle(context, new Vector(0, 1, 0), shift));
         }
     }
+
+    public void scale(float scale) {
+        Matrix.scaleM(modelMatrix, 0, scale, scale, scale);
+    }
 }

@@ -6,6 +6,7 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 
+import com.example.celestialspheregeometry.controller.sphere.SphereController;
 import com.example.celestialspheregeometry.model.sphere.SphereScene;
 import com.example.celestialspheregeometry.model.utils.math.Point;
 import com.example.celestialspheregeometry.model.utils.math.Vector;
@@ -13,11 +14,14 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import lombok.Getter;
 
 
+@Getter
 public class SphereGLRenderer implements GLSurfaceView.Renderer {
 
-    private final Context context;
+    public final Context context;
+    public final SphereController sphereController;
 
     private final float[] viewMatrix = new float[16];
     private final float[] projectionMatrix = new float[16];
@@ -27,15 +31,18 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
     SphereScene sphereScene;
 
 
-    public SphereGLRenderer(Context context) {
+    public SphereGLRenderer(Context context, SphereController sphereController) {
         this.context = context;
+        this.sphereController = sphereController;
     }
 
 
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
         this.sphereScene = new SphereScene(context);
+        sphereController.setSphereScene(sphereScene);
     }
 
 

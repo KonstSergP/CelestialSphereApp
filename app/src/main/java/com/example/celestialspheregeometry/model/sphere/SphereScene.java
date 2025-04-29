@@ -7,7 +7,10 @@ import com.example.celestialspheregeometry.model.utils.math.Point;
 import com.example.celestialspheregeometry.model.utils.math.Vector;
 import com.example.celestialspheregeometry.rendering.SphereGLRenderer;
 
+import lombok.Getter;
 
+
+@Getter
 public class SphereScene {
 
     Sphere sphere;
