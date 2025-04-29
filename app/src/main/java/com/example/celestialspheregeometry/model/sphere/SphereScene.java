@@ -1,11 +1,11 @@
-package com.example.celestialspheregeometry.rendering;
+package com.example.celestialspheregeometry.model.sphere;
 
 import android.content.Context;
 import android.os.SystemClock;
 
-import com.example.celestialspheregeometry.model.sphere.Sphere;
 import com.example.celestialspheregeometry.model.utils.math.Point;
 import com.example.celestialspheregeometry.model.utils.math.Vector;
+import com.example.celestialspheregeometry.rendering.SphereGLRenderer;
 
 
 public class SphereScene {

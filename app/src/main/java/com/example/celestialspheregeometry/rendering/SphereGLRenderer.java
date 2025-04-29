@@ -5,6 +5,8 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+
+import com.example.celestialspheregeometry.model.sphere.SphereScene;
 import com.example.celestialspheregeometry.model.utils.math.Point;
 import com.example.celestialspheregeometry.model.utils.math.Vector;
 import java.nio.FloatBuffer;

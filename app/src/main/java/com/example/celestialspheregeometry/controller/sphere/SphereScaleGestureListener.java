@@ -4,9 +4,16 @@ import android.view.ScaleGestureDetector;
 
 
 public class SphereScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+
+    private float scaleFactor = 1.0f;
+
+
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
-        System.out.println(detector.getScaleFactor());
+        scaleFactor *= detector.getScaleFactor();
+        // Ограничиваем масштаб
+        scaleFactor = Math.max(0.1f, Math.min(scaleFactor, 5.0f));
+        //sphere.setScale(scaleFactor);
         return true;
     }
 }
