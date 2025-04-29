@@ -1,7 +1,6 @@
 package com.example.celestialspheregeometry.rendering;
 
 import android.content.Context;
-import android.opengl.Matrix;
 import android.os.SystemClock;
 
 import com.example.celestialspheregeometry.model.sphere.Sphere;
@@ -25,7 +24,7 @@ public class SphereScene {
     {
         float time = (float)(SystemClock.uptimeMillis() % 10000) / 10000;
         float angle = (time - prevTime) * 360; prevTime = time;
-        sphere.rotateAroundAxis(sphere.getRotationAxis(), angle);
+        sphere.rotateAroundMainAxis(angle);
     }
 
 
