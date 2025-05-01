@@ -3,9 +3,9 @@ package com.example.celestialspheregeometry.controller.sphere;
 import android.content.Context;
 
 import com.example.celestialspheregeometry.model.sphere.SphereScene;
-import com.example.celestialspheregeometry.model.utils.math.MathUtils;
-import com.example.celestialspheregeometry.model.utils.math.Vector;
 import com.example.celestialspheregeometry.rendering.SphereGLRenderer;
+
+import org.joml.Vector3f;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,7 +33,7 @@ public class SphereController {
         distanceX /= swipeLength;
         distanceY /= swipeLength;
 
-        Vector rot = MathUtils.cross(new Vector(0, 0, 1), new Vector(-distanceX, distanceY, 0));
+        Vector3f rot = new Vector3f(0, 0, 1).cross(new Vector3f(-distanceX, distanceY, 0));
 
         sphereScene.getSphere().rotateAroundAxis(rot, swipeLength);
     }

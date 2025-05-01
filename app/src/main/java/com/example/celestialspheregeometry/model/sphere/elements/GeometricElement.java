@@ -1,11 +1,13 @@
 package com.example.celestialspheregeometry.model.sphere.elements;
 
-import com.example.celestialspheregeometry.model.utils.math.Vector;
 import com.example.celestialspheregeometry.rendering.SphereGLRenderer;
+
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 
 public interface GeometricElement {
-    void draw(SphereGLRenderer sphereGLRenderer, float[] rotationMatrix);
+    void draw(SphereGLRenderer sphereGLRenderer, Matrix4f rotationMatrix);
 
-    void rotateAroundAxis(Vector axis, float angle);
+    void rotateAroundAxis(Vector3f axis, float angle);
 }

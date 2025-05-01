@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.lombok)
+    implementation(libs.joml)
     annotationProcessor(libs.lombok.v11830)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

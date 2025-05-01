@@ -4,12 +4,13 @@ package com.example.celestialspheregeometry.rendering;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
-import android.opengl.Matrix;
 
 import com.example.celestialspheregeometry.controller.sphere.SphereController;
 import com.example.celestialspheregeometry.model.sphere.SphereScene;
-import com.example.celestialspheregeometry.model.utils.math.Point;
-import com.example.celestialspheregeometry.model.utils.math.Vector;
+
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+
 import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -23,10 +24,11 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
     public final Context context;
     public final SphereController sphereController;
 
-    private final float[] viewMatrix = new float[16];
-    private final float[] projectionMatrix = new float[16];
-    private final float[] VPMatrix = new float[16];
-    private final float[] MVPMatrix = new float[16];
+    private final Matrix4f viewMatrix = new Matrix4f();
+    private final Matrix4f projectionMatrix = new Matrix4f();
+    private final Matrix4f VPMatrix = new Matrix4f();
+    private final Matrix4f MVPMatrix = new Matrix4f();
+    float[] tmpFloatArray = new float[16];
 
     SphereScene sphereScene;
 
@@ -49,8 +51,8 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceChanged(GL10 unused, int width, int height) {
         GLES20.glViewport(0, 0, width, height);
-        Camera.getFrustumProjection(projectionMatrix, width, height);
-        Camera.getView(viewMatrix, new Point(0, 0, 0), new Point(0, 0, -1), new Vector(0, 1, 0));
+        Camera.getProjection(projectionMatrix, width, height);
+        Camera.getView(viewMatrix, new Vector3f(0, 0, 0), new Vector3f(0, 0, -1), new Vector3f(0, 1, 0));
         Camera.updateViewProjMatrix(VPMatrix, viewMatrix, projectionMatrix);
     }
 
@@ -68,17 +70,17 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
     }
 
 
-    public void drawLoop(int program, FloatBuffer vertexBuffer, float[] MMatrix, int points)
+    public void drawLoop(int program, FloatBuffer vertexBuffer, Matrix4f MMatrix, int points)
     {
         GLES20.glUseProgram(program);
 
         GLES20.glEnableVertexAttribArray(0);
         GLES20.glVertexAttribPointer(0, 3, GLES20.GL_FLOAT, false, 0, vertexBuffer);
 
-        Matrix.multiplyMM(MVPMatrix, 0, VPMatrix, 0, MMatrix, 0);
+        VPMatrix.mul(MMatrix, MVPMatrix);
 
-        int VPMatrixLocation = GLES20.glGetUniformLocation(program, "MVPMatrix");
-        GLES20.glUniformMatrix4fv(VPMatrixLocation, 1, false, MVPMatrix, 0);
+        int MVPMatrixLocation = GLES20.glGetUniformLocation(program, "MVPMatrix");
+        GLES20.glUniformMatrix4fv(MVPMatrixLocation, 1, false, MVPMatrix.get(tmpFloatArray), 0);
 
         GLES20.glLineWidth(5.0f);
         GLES20.glDrawArrays(GLES20.GL_LINE_LOOP, 0, points);

@@ -1,14 +1,15 @@
 package com.example.celestialspheregeometry.model.sphere;
 
 import android.content.Context;
-import android.opengl.Matrix;
 
 import com.example.celestialspheregeometry.model.sphere.elements.astronomy.SphereCircle;
 import com.example.celestialspheregeometry.model.sphere.elements.GeometricElement;
 import com.example.celestialspheregeometry.model.utils.math.MathUtils;
-import com.example.celestialspheregeometry.model.utils.math.Point;
-import com.example.celestialspheregeometry.model.utils.math.Vector;
 import com.example.celestialspheregeometry.rendering.SphereGLRenderer;
+
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,28 +21,25 @@ import lombok.Setter;
 @Getter
 public class Sphere {
 
-    Point center;
-    Vector rotationAxis;
-    float radius;
+    public Vector3f center;
+    public Vector3f rotationAxis;
+    public float radius;
     public final List<GeometricElement> elements = new ArrayList<>();
     public final Context context;
 
-    public float[] tmpMatrix = new float[16];
-    public float[] modelMatrix = new float[16];
-    public float[] rotationMatrix = new float[16];
-    public float[] resModelMatrix = new float[16];
+    public Matrix4f tmpMatrix = new Matrix4f();
+    public Matrix4f modelMatrix = new Matrix4f();
+    public Matrix4f rotationMatrix = new Matrix4f();
+    public Matrix4f resModelMatrix = new Matrix4f();
 
 
-    public Sphere(Context context, Point center, Vector axis, float r) {
+    public Sphere(Context context, Vector3f center, Vector3f axis, float r) {
         this.center = center; this.rotationAxis = axis; this.radius = r;
         this.context = context;
 
-        Matrix.setIdentityM(modelMatrix, 0);
-        Matrix.translateM(modelMatrix, 0, getCenter().getX(), getCenter().getY(), getCenter().getZ());
-        Matrix.scaleM(modelMatrix, 0, radius, radius, radius);
+        modelMatrix.translate(center).scale(radius);
 
-        Matrix.setIdentityM(rotationMatrix, 0);
-        MathUtils.rotateBetweenVecs(rotationMatrix, new Vector(0, 1, 0), rotationAxis);
+        MathUtils.rotateBetweenVecs(rotationMatrix, new Vector3f(0, 1, 0), rotationAxis);
 
         createMeridians(6);
         createParallels(5);
@@ -49,19 +47,20 @@ public class Sphere {
 
 
     public void rotateAroundMainAxis(float angle) {
-        Matrix.rotateM(rotationMatrix, 0, angle, 0, 1, 0);
+        rotationMatrix.rotate((float)Math.toRadians(angle), new Vector3f(0, 1, 0));
     }
 
-    public void rotateAroundAxis(Vector axis, float angle)
+
+    public void rotateAroundAxis(Vector3f axis, float angle)
     {
-        MathUtils.rotateV(rotationAxis, angle, axis.getX(), axis.getY(), axis.getZ());
-        Matrix.setRotateM(tmpMatrix, 0, angle, axis.getX(), axis.getY(), axis.getZ());
-        Matrix.multiplyMM(rotationMatrix, 0, tmpMatrix, 0, rotationMatrix, 0);
+        rotationAxis.rotateAxis((float)Math.toRadians(angle), axis.x, axis.y, axis.z);
+        tmpMatrix.identity().rotate((float)Math.toRadians(angle), axis);
+        tmpMatrix.mul(rotationMatrix, rotationMatrix);
     }
 
 
     public void draw(SphereGLRenderer sphereGLRenderer) {
-        Matrix.multiplyMM(resModelMatrix, 0, modelMatrix, 0, rotationMatrix, 0);
+        modelMatrix.mul(rotationMatrix, resModelMatrix);
         for (GeometricElement circle: elements) {
             circle.draw(sphereGLRenderer, resModelMatrix);
         }
@@ -70,25 +69,23 @@ public class Sphere {
 
     public void createMeridians(int k) {
         float step = 180f / k;
-        float[] rotMatrix = new float[16];
+        Matrix4f rotMatrix = new Matrix4f();
         for (int i = 0; i < k; i++) {
-            float[] vec = new float[]{0, 0, -1, 0};
-            float angle = i*step;
-            System.out.println(angle);
-            Matrix.setRotateM(rotMatrix, 0, angle, 0, 1, 0);
-            Matrix.multiplyMV(vec, 0, rotMatrix, 0, vec, 0);
-            elements.add(new SphereCircle(context, new Vector(vec[0], vec[1], vec[2]), 0));
+            Vector3f vec = new Vector3f(0, 0, -1);
+            rotMatrix.transformPosition(vec);
+            elements.add(new SphereCircle(context, vec, 0));
+            rotMatrix.rotate((float)Math.toRadians(step), new Vector3f(0, 1, 0));
         }
     }
 
 
     public void createParallels(int k) {
         for (float shift = 180f*k/(k+1) - 90; shift > -90f; shift -= 180f/(k+1)) {
-            elements.add(new SphereCircle(context, new Vector(0, 1, 0), shift));
+            elements.add(new SphereCircle(context, new Vector3f(0, 1, 0), shift));
         }
     }
 
     public void scale(float scale) {
-        Matrix.scaleM(modelMatrix, 0, scale, scale, scale);
+        modelMatrix.scale(scale);
     }
 }

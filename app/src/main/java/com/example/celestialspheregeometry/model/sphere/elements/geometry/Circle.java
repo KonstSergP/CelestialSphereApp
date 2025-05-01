@@ -5,11 +5,14 @@ import android.opengl.Matrix;
 
 import com.example.celestialspheregeometry.model.sphere.elements.GeometricElement;
 import com.example.celestialspheregeometry.model.utils.math.MathUtils;
-import com.example.celestialspheregeometry.model.utils.math.Point;
-import com.example.celestialspheregeometry.model.utils.math.Vector;
 import com.example.celestialspheregeometry.rendering.SphereGLRenderer;
 import com.example.celestialspheregeometry.rendering.shaders.ProgramBuilder;
 import com.example.celestialspheregeometry.model.utils.BufferUtils;
+
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
+
 import java.nio.FloatBuffer;
 import lombok.Getter;
 
@@ -20,19 +23,17 @@ public class Circle implements GeometricElement {
 
     public int program;
     public FloatBuffer vertexBuffer;
-    public float[] modelMatrix = new float[16];
 
-    public float[] rotationMatrix = new float[16];
-    public float[] rotatedOrt = new float[4];
+    public Matrix4f modelMatrix = new Matrix4f();
+    public Matrix4f rotationMatrix = new Matrix4f();
+    public Matrix4f resModelMatrix = new Matrix4f();
 
-    public float[] resModelMatrix = new float[16];
-
-    Point center;
-    Vector ort;
-    float radius;
+    public Vector3f center;
+    public Vector3f ort;
+    public float radius;
 
 
-    public Circle(Context context, Point center, Vector ort, float radius) {
+    public Circle(Context context, Vector3f center, Vector3f ort, float radius) {
         program = ProgramBuilder.buildProgram(context, "Circle");
         this.center = center; this.ort = ort; this.radius = radius;
         generateVertices();
@@ -40,11 +41,10 @@ public class Circle implements GeometricElement {
     }
 
 
-    public void rotateAroundAxis(Vector axis, float angle) {
-        Matrix.setRotateM(rotationMatrix, 0, angle, axis.getX(), axis.getY(), axis.getZ());
-        Matrix.multiplyMM(modelMatrix, 0, rotationMatrix, 0, modelMatrix, 0);
-        Matrix.multiplyMV(rotatedOrt, 0, rotationMatrix, 0, axis.to4FloatArray(), 0);
-        ort = new Vector(rotatedOrt[0], rotatedOrt[1], rotatedOrt[2]);
+    public void rotateAroundAxis(Vector3f axis, float angle) {
+        ort.rotateAxis((float)Math.toRadians(angle), axis.x, axis.y, axis.z);
+        rotationMatrix.identity().rotate((float)Math.toRadians(angle), axis);
+        rotationMatrix.mul(modelMatrix, modelMatrix);
     }
 
 
@@ -65,15 +65,13 @@ public class Circle implements GeometricElement {
 
     void generateModelMatrix()
     {
-        Matrix.setIdentityM(modelMatrix, 0);
-        Matrix.translateM(modelMatrix, 0, center.getX(), center.getY(), center.getZ());
-
-        MathUtils.rotateBetweenVecs(modelMatrix, new Vector(0, 1, 0), ort);
+        modelMatrix.setTranslation(center);
+        MathUtils.rotateBetweenVecs(modelMatrix, new Vector3f(0, 1, 0), ort);
     }
 
 
-    public void draw(SphereGLRenderer sphereGLRenderer, float[] sphereMatrix) {
-        Matrix.multiplyMM(resModelMatrix, 0, sphereMatrix, 0, modelMatrix, 0);
+    public void draw(SphereGLRenderer sphereGLRenderer, Matrix4f sphereMatrix) {
+        sphereMatrix.mul(modelMatrix, resModelMatrix);
         sphereGLRenderer.drawLoop(program, vertexBuffer, resModelMatrix, 360);
     }
 }

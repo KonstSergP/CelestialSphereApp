@@ -2,10 +2,9 @@ package com.example.celestialspheregeometry.model.sphere;
 
 import android.content.Context;
 import android.os.SystemClock;
-
-import com.example.celestialspheregeometry.model.utils.math.Point;
-import com.example.celestialspheregeometry.model.utils.math.Vector;
 import com.example.celestialspheregeometry.rendering.SphereGLRenderer;
+
+import org.joml.Vector3f;
 
 import lombok.Getter;
 
@@ -17,9 +16,8 @@ public class SphereScene {
     float prevTime = (float)(SystemClock.uptimeMillis() % 10000) / 10000;
 
 
-    public SphereScene(Context context)
-    {
-        sphere = new Sphere(context, new Point(0, 0, -6), new Vector(1, 1, -0.5f, true), 2);
+    public SphereScene(Context context) {
+        sphere = new Sphere(context, new Vector3f(0, 0, -6), new Vector3f(1, 1, -0.5f), 2);
     }
 
 

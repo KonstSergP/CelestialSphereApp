@@ -1,5 +1,6 @@
 [versions]
 agp = "8.8.2"
+jomlAndroid = "1.10.8"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -11,6 +12,8 @@ constraintlayout = "2.2.1"
 lombok = "1.18.30"
 
 [libraries]
+joml = { module = "org.joml:joml", version.ref = "jomlAndroid" }
+joml-android = { module = "org.joml:joml-android", version.ref = "jomlAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
