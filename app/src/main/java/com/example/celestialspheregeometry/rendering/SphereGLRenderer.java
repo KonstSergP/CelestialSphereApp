@@ -74,8 +74,9 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
     {
         GLES20.glUseProgram(program);
 
-        GLES20.glEnableVertexAttribArray(0);
-        GLES20.glVertexAttribPointer(0, 3, GLES20.GL_FLOAT, false, 0, vertexBuffer);
+        int positionLocation = GLES20.glGetAttribLocation(program, "vPosition");
+        GLES20.glEnableVertexAttribArray(positionLocation);
+        GLES20.glVertexAttribPointer(positionLocation, 3, GLES20.GL_FLOAT, false, 0, vertexBuffer);
 
         VPMatrix.mul(MMatrix, MVPMatrix);
 
