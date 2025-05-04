@@ -16,8 +16,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SphereController sphereController = new SphereController(this);
-        glSurfaceView = new SphereGLSurfaceView(this, sphereController);
+        SphereScene sphereScene = new SphereScene();
+        SphereController sphereController = new SphereController(sphereScene);
+        glSurfaceView = new SphereGLSurfaceView(this, sphereScene, sphereController);
 
         setContentView(glSurfaceView);
     }

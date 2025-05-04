@@ -15,11 +15,11 @@ public class SphereCircle implements GeometricElement {
     Circle circle;
 
 
-    public SphereCircle(Context context, Vector3f ort, float shift)
+    public SphereCircle(Vector3f ort, float shift)
     {
         float radius = (float)(Math.cos(Math.toRadians(shift)));
         float d = (float)(Math.sin(Math.toRadians(shift)));
-        circle = new Circle(context, new Vector3f(ort).mul(d), ort, radius);
+        circle = new Circle(new Vector3f(ort).mul(d), ort, radius);
     }
 
 

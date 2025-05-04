@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.example.celestialspheregeometry.model.sphere.elements.astronomy.SphereCircle;
 import com.example.celestialspheregeometry.model.sphere.elements.GeometricElement;
-import com.example.celestialspheregeometry.model.utils.math.MathUtils;
+import com.example.celestialspheregeometry.model.utils.MathUtils;
 import com.example.celestialspheregeometry.rendering.SphereGLRenderer;
 
 import org.joml.Matrix4f;
@@ -25,7 +25,6 @@ public class Sphere {
     public Vector3f rotationAxis;
     public float radius;
     public final List<GeometricElement> elements = new ArrayList<>();
-    public final Context context;
 
     public Matrix4f tmpMatrix = new Matrix4f();
     public Matrix4f modelMatrix = new Matrix4f();
@@ -33,9 +32,8 @@ public class Sphere {
     public Matrix4f resModelMatrix = new Matrix4f();
 
 
-    public Sphere(Context context, Vector3f center, Vector3f axis, float r) {
+    public Sphere(Vector3f center, Vector3f axis, float r) {
         this.center = center; this.rotationAxis = axis; this.radius = r;
-        this.context = context;
 
         modelMatrix.translate(center).scale(radius);
 
@@ -73,7 +71,7 @@ public class Sphere {
         for (int i = 0; i < k; i++) {
             Vector3f vec = new Vector3f(0, 0, -1);
             rotMatrix.transformPosition(vec);
-            elements.add(new SphereCircle(context, vec, 0));
+            elements.add(new SphereCircle(vec, 0));
             rotMatrix.rotate((float)Math.toRadians(step), new Vector3f(0, 1, 0));
         }
     }
@@ -81,7 +79,7 @@ public class Sphere {
 
     public void createParallels(int k) {
         for (float shift = 180f*k/(k+1) - 90; shift > -90f; shift -= 180f/(k+1)) {
-            elements.add(new SphereCircle(context, new Vector3f(0, 1, 0), shift));
+            elements.add(new SphereCircle(new Vector3f(0, 1, 0), shift));
         }
     }
 

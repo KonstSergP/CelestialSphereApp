@@ -16,11 +16,10 @@ import lombok.Setter;
 public class SphereController {
 
     public SphereScene sphereScene;
-    public SphereGLRenderer sphereGLRenderer;
 
 
-    public SphereController(Context context) {
-        this.sphereGLRenderer = new SphereGLRenderer(context, this);
+    public SphereController(SphereScene sphereScene) {
+        this.sphereScene = sphereScene;
     }
 
 

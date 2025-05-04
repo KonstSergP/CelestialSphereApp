@@ -1,17 +1,13 @@
 package com.example.celestialspheregeometry.model.sphere.elements.geometry;
 
-import android.content.Context;
-import android.opengl.Matrix;
-
 import com.example.celestialspheregeometry.model.sphere.elements.GeometricElement;
-import com.example.celestialspheregeometry.model.utils.math.MathUtils;
+import com.example.celestialspheregeometry.model.utils.MathUtils;
 import com.example.celestialspheregeometry.rendering.SphereGLRenderer;
-import com.example.celestialspheregeometry.rendering.shaders.ProgramBuilder;
+import com.example.celestialspheregeometry.rendering.shaders.GLProgramType;
 import com.example.celestialspheregeometry.model.utils.BufferUtils;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 
 import java.nio.FloatBuffer;
 import lombok.Getter;
@@ -21,7 +17,7 @@ import lombok.Getter;
 @Getter
 public class Circle implements GeometricElement {
 
-    public int program;
+    public GLProgramType program;
     public FloatBuffer vertexBuffer;
 
     public Matrix4f modelMatrix = new Matrix4f();
@@ -33,8 +29,8 @@ public class Circle implements GeometricElement {
     public float radius;
 
 
-    public Circle(Context context, Vector3f center, Vector3f ort, float radius) {
-        program = ProgramBuilder.buildProgram(context, "Circle");
+    public Circle(Vector3f center, Vector3f ort, float radius) {
+        program = GLProgramType.DEFAULT;
         this.center = center; this.ort = ort; this.radius = radius;
         generateVertices();
         generateModelMatrix();

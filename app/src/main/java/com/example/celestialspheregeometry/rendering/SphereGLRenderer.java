@@ -5,8 +5,9 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 
-import com.example.celestialspheregeometry.controller.sphere.SphereController;
 import com.example.celestialspheregeometry.model.sphere.SphereScene;
+import com.example.celestialspheregeometry.rendering.shaders.GLProgramManager;
+import com.example.celestialspheregeometry.rendering.shaders.GLProgramType;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -22,7 +23,8 @@ import lombok.Getter;
 public class SphereGLRenderer implements GLSurfaceView.Renderer {
 
     public final Context context;
-    public final SphereController sphereController;
+    public final GLProgramManager programManager;
+    public final SphereScene sphereScene;
 
     private final Matrix4f viewMatrix = new Matrix4f();
     private final Matrix4f projectionMatrix = new Matrix4f();
@@ -30,21 +32,17 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
     private final Matrix4f MVPMatrix = new Matrix4f();
     float[] tmpFloatArray = new float[16];
 
-    SphereScene sphereScene;
 
-
-    public SphereGLRenderer(Context context, SphereController sphereController) {
+    public SphereGLRenderer(Context context, SphereScene sphereScene) {
         this.context = context;
-        this.sphereController = sphereController;
+        this.sphereScene = sphereScene;
+        this.programManager = new GLProgramManager(context);
     }
 
 
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
-        this.sphereScene = new SphereScene(context);
-        sphereController.setSphereScene(sphereScene);
     }
 
 
@@ -70,17 +68,18 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
     }
 
 
-    public void drawLoop(int program, FloatBuffer vertexBuffer, Matrix4f MMatrix, int points)
+    public void drawLoop(GLProgramType program, FloatBuffer vertexBuffer, Matrix4f MMatrix, int points)
     {
-        GLES20.glUseProgram(program);
+        int GLProgram = programManager.getProgram(program);
+        GLES20.glUseProgram(GLProgram);
 
-        int positionLocation = GLES20.glGetAttribLocation(program, "vPosition");
+        int positionLocation = GLES20.glGetAttribLocation(GLProgram, "vPosition");
         GLES20.glEnableVertexAttribArray(positionLocation);
         GLES20.glVertexAttribPointer(positionLocation, 3, GLES20.GL_FLOAT, false, 0, vertexBuffer);
 
         VPMatrix.mul(MMatrix, MVPMatrix);
 
-        int MVPMatrixLocation = GLES20.glGetUniformLocation(program, "MVPMatrix");
+        int MVPMatrixLocation = GLES20.glGetUniformLocation(GLProgram, "MVPMatrix");
         GLES20.glUniformMatrix4fv(MVPMatrixLocation, 1, false, MVPMatrix.get(tmpFloatArray), 0);
 
         GLES20.glLineWidth(5.0f);

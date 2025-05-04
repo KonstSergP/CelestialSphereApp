@@ -16,8 +16,8 @@ public class SphereScene {
     float prevTime = (float)(SystemClock.uptimeMillis() % 10000) / 10000;
 
 
-    public SphereScene(Context context) {
-        sphere = new Sphere(context, new Vector3f(0, 0, -6), new Vector3f(1, 1, -0.5f), 2);
+    public SphereScene() {
+        sphere = new Sphere(new Vector3f(0, 0, -6), new Vector3f(1, 1, -0.5f), 2);
     }
 
 
