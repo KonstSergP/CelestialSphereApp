@@ -1,13 +1,14 @@
 package com.example.celestialspheregeometry.model.sphere.elements.astronomy;
 
-import android.content.Context;
 
 import com.example.celestialspheregeometry.model.sphere.elements.GeometricElement;
 import com.example.celestialspheregeometry.model.sphere.elements.geometry.Circle;
-import com.example.celestialspheregeometry.rendering.SphereGLRenderer;
+import com.example.celestialspheregeometry.model.utils.Primitive;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+
+import java.util.List;
 
 
 public class SphereCircle implements GeometricElement {
@@ -24,13 +25,13 @@ public class SphereCircle implements GeometricElement {
 
 
     @Override
-    public void draw(SphereGLRenderer sphereGLRenderer, Matrix4f rotationMatrix) {
-        circle.draw(sphereGLRenderer, rotationMatrix);
+    public void rotateAroundAxis(Vector3f axis, float angle) {
+        circle.rotateAroundAxis(axis, angle);
     }
 
 
     @Override
-    public void rotateAroundAxis(Vector3f axis, float angle) {
-        circle.rotateAroundAxis(axis, angle);
+    public void getPrimitives(Matrix4f modelMatrix, List<Primitive> primitives) {
+        circle.getPrimitives(modelMatrix, primitives);
     }
 }

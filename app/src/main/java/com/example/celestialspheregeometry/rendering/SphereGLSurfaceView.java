@@ -28,7 +28,7 @@ public class SphereGLSurfaceView extends GLSurfaceView {
         setEGLContextClientVersion(2);
 
         this.sphereController = sphereController;
-        sphereGLRenderer = new SphereGLRenderer(context, sphereScene);
+        sphereGLRenderer = new SphereGLRenderer(context, sphereController);
         gestureDetector = new GestureDetector(context, new SphereGestureListener(sphereController));
         scaleGestureDetector = new ScaleGestureDetector(context, new SphereScaleGestureListener(sphereController));
 

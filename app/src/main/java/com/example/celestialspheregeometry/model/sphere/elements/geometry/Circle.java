@@ -2,7 +2,8 @@ package com.example.celestialspheregeometry.model.sphere.elements.geometry;
 
 import com.example.celestialspheregeometry.model.sphere.elements.GeometricElement;
 import com.example.celestialspheregeometry.model.utils.MathUtils;
-import com.example.celestialspheregeometry.rendering.SphereGLRenderer;
+import com.example.celestialspheregeometry.model.utils.Primitive;
+import com.example.celestialspheregeometry.model.utils.Primitive.*;
 import com.example.celestialspheregeometry.rendering.shaders.GLProgramType;
 import com.example.celestialspheregeometry.model.utils.BufferUtils;
 
@@ -10,6 +11,9 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import java.nio.FloatBuffer;
+import java.util.List;
+import java.util.Map;
+
 import lombok.Getter;
 
 
@@ -28,12 +32,19 @@ public class Circle implements GeometricElement {
     public Vector3f ort;
     public float radius;
 
+    public Primitive primitive = new Primitive();
+
 
     public Circle(Vector3f center, Vector3f ort, float radius) {
-        program = GLProgramType.DEFAULT;
+        primitive.setProgram(GLProgramType.DEFAULT);
+        primitive.setUniforms(Map.of("MVPMatrix", new Uniform(UniformType.MATRIX4f, new float[16])));
+        primitive.setPoints(360);
+
         this.center = center; this.ort = ort; this.radius = radius;
         generateVertices();
         generateModelMatrix();
+
+        primitive.setAttributes(Map.of("vPosition", vertexBuffer));
     }
 
 
@@ -66,8 +77,10 @@ public class Circle implements GeometricElement {
     }
 
 
-    public void draw(SphereGLRenderer sphereGLRenderer, Matrix4f sphereMatrix) {
-        sphereMatrix.mul(modelMatrix, resModelMatrix);
-        sphereGLRenderer.drawLoop(program, vertexBuffer, resModelMatrix, 360);
+    @Override
+    public void getPrimitives(Matrix4f outerMatrix, List<Primitive> primitives) {
+        outerMatrix.mul(modelMatrix, resModelMatrix);
+        resModelMatrix.get(primitive.getUniforms().get("MVPMatrix").getArray());
+        primitives.add(primitive);
     }
 }

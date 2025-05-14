@@ -1,10 +1,13 @@
 package com.example.celestialspheregeometry.model.sphere;
 
-import android.content.Context;
 import android.os.SystemClock;
-import com.example.celestialspheregeometry.rendering.SphereGLRenderer;
 
+import com.example.celestialspheregeometry.model.utils.Primitive;
+
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
+
+import java.util.List;
 
 import lombok.Getter;
 
@@ -29,7 +32,7 @@ public class SphereScene {
     }
 
 
-    public void draw(SphereGLRenderer sphereGLRenderer) {
-        sphere.draw(sphereGLRenderer);
+    public void getPrimitives(Matrix4f modelMatrix, List<Primitive> primitives) {
+        sphere.getPrimitives(modelMatrix, primitives);
     }
 }

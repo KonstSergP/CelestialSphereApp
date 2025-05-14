@@ -1,11 +1,10 @@
 package com.example.celestialspheregeometry.model.sphere;
 
-import android.content.Context;
-
 import com.example.celestialspheregeometry.model.sphere.elements.astronomy.SphereCircle;
 import com.example.celestialspheregeometry.model.sphere.elements.GeometricElement;
 import com.example.celestialspheregeometry.model.utils.MathUtils;
 import com.example.celestialspheregeometry.rendering.SphereGLRenderer;
+import com.example.celestialspheregeometry.model.utils.Primitive;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -57,14 +56,6 @@ public class Sphere {
     }
 
 
-    public void draw(SphereGLRenderer sphereGLRenderer) {
-        modelMatrix.mul(rotationMatrix, resModelMatrix);
-        for (GeometricElement circle: elements) {
-            circle.draw(sphereGLRenderer, resModelMatrix);
-        }
-    }
-
-
     public void createMeridians(int k) {
         float step = 180f / k;
         Matrix4f rotMatrix = new Matrix4f();
@@ -83,7 +74,15 @@ public class Sphere {
         }
     }
 
+
     public void scale(float scale) {
         modelMatrix.scale(scale);
+    }
+
+
+    public void getPrimitives(Matrix4f outerMatrix, List<Primitive> primitives) {
+        modelMatrix.mul(rotationMatrix, resModelMatrix);
+        outerMatrix.mul(resModelMatrix, resModelMatrix);
+        elements.forEach(element -> element.getPrimitives(resModelMatrix, primitives));
     }
 }

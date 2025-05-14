@@ -5,7 +5,9 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 
-import com.example.celestialspheregeometry.model.sphere.SphereScene;
+import com.example.celestialspheregeometry.controller.sphere.SphereController;
+import com.example.celestialspheregeometry.model.utils.Primitive.Uniform;
+import com.example.celestialspheregeometry.model.utils.Primitive;
 import com.example.celestialspheregeometry.rendering.shaders.GLProgramManager;
 import com.example.celestialspheregeometry.rendering.shaders.GLProgramType;
 
@@ -13,6 +15,10 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -24,18 +30,19 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
 
     public final Context context;
     public final GLProgramManager programManager;
-    public final SphereScene sphereScene;
+    public final SphereController sphereController;
 
     private final Matrix4f viewMatrix = new Matrix4f();
     private final Matrix4f projectionMatrix = new Matrix4f();
     private final Matrix4f VPMatrix = new Matrix4f();
     private final Matrix4f MVPMatrix = new Matrix4f();
     float[] tmpFloatArray = new float[16];
+    List<Primitive> primitives = new ArrayList<>();
 
 
-    public SphereGLRenderer(Context context, SphereScene sphereScene) {
+    public SphereGLRenderer(Context context, SphereController sphereController) {
         this.context = context;
-        this.sphereScene = sphereScene;
+        this.sphereController = sphereController;
         this.programManager = new GLProgramManager(context);
     }
 
@@ -57,9 +64,10 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 unused) {
-        clear();
-        sphereScene.update();
-        sphereScene.draw(this);
+        clear(); primitives.clear();
+        sphereController.updateScene();
+        sphereController.getPrimitives(VPMatrix, primitives);
+        drawPrimitives(primitives);
     }
 
 
@@ -68,23 +76,62 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
     }
 
 
-    public void drawLoop(GLProgramType program, FloatBuffer vertexBuffer, Matrix4f MMatrix, int points)
+    public void drawPrimitives(List<Primitive> primitives) {
+        primitives.forEach(this::drawPrimitive);
+    }
+
+
+    public void drawPrimitive(Primitive primitive)
     {
-        int GLProgram = programManager.getProgram(program);
-        GLES20.glUseProgram(GLProgram);
+        enableProgram(primitive.getProgram());
 
-        int positionLocation = GLES20.glGetAttribLocation(GLProgram, "vPosition");
-        GLES20.glEnableVertexAttribArray(positionLocation);
-        GLES20.glVertexAttribPointer(positionLocation, 3, GLES20.GL_FLOAT, false, 0, vertexBuffer);
+        enableAttributes(primitive.getProgram(), primitive.getAttributes());
 
-        VPMatrix.mul(MMatrix, MVPMatrix);
+        loadUniforms(primitive.getProgram(), primitive.getUniforms());
 
-        int MVPMatrixLocation = GLES20.glGetUniformLocation(GLProgram, "MVPMatrix");
-        GLES20.glUniformMatrix4fv(MVPMatrixLocation, 1, false, MVPMatrix.get(tmpFloatArray), 0);
+        draw(primitive.getPoints());
 
+        disableAttributes(primitive.getProgram(), primitive.getAttributes());
+    }
+
+
+    public void enableProgram(GLProgramType program) {
+        GLES20.glUseProgram(programManager.getProgram(program));
+    }
+
+
+    public void enableAttributes(GLProgramType program, Map<String, FloatBuffer> attributes)
+    {
+        for (var entry: attributes.entrySet())
+        {
+            int location = GLES20.glGetAttribLocation(programManager.getProgram(program), entry.getKey());
+            GLES20.glEnableVertexAttribArray(location);
+            GLES20.glVertexAttribPointer(location, 3, GLES20.GL_FLOAT, false, 0, entry.getValue());
+        }
+    }
+
+    private void disableAttributes(GLProgramType program, Map<String, FloatBuffer> attributes) {
+        for (var entry: attributes.entrySet())
+        {
+            int location = GLES20.glGetAttribLocation(programManager.getProgram(program), entry.getKey());
+            GLES20.glDisableVertexAttribArray(location);
+        }
+    }
+
+    private void loadUniforms(GLProgramType program, Map<String, Uniform> uniforms) {
+        for (var entry: uniforms.entrySet())
+        {
+            int location = GLES20.glGetUniformLocation(programManager.getProgram(program), entry.getKey());
+            switch (entry.getValue().getType())
+            {
+                case MATRIX4f -> GLES20.glUniformMatrix4fv(location, 1, false, entry.getValue().getArray(), 0);
+                case VECTOR4f ->  GLES20.glUniform4fv(location, 1, entry.getValue().getArray(), 0);
+            }
+        }
+    }
+
+    private void draw(int points) {
         GLES20.glLineWidth(5.0f);
         GLES20.glDrawArrays(GLES20.GL_LINE_LOOP, 0, points);
-
-        GLES20.glDisableVertexAttribArray(0);
     }
 }
