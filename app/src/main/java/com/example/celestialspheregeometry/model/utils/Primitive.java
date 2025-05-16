@@ -21,6 +21,10 @@ public class Primitive {
 
     int points;
 
+    int primitiveType;
+
+    float lineWidth;
+
     Map<String, FloatBuffer> attributes;
 
     Map<String, Uniform> uniforms;
@@ -35,6 +39,16 @@ public class Primitive {
 
         float[] array;
 
+
+        public Uniform(UniformType type)
+        {
+            this.type = type;
+            switch (type)
+            {
+                case MATRIX4f -> array = new float[16];
+                case VECTOR4f -> array = new float[4];
+            }
+        }
     }
 
 

@@ -30,13 +30,15 @@ public class Sphere {
     public Matrix4f rotationMatrix = new Matrix4f();
     public Matrix4f resModelMatrix = new Matrix4f();
 
+    public static Vector3f UP = new Vector3f(0, 1, 0);
+
 
     public Sphere(Vector3f center, Vector3f axis, float r) {
         this.center = center; this.rotationAxis = axis; this.radius = r;
 
         modelMatrix.translate(center).scale(radius);
 
-        MathUtils.rotateBetweenVecs(rotationMatrix, new Vector3f(0, 1, 0), rotationAxis);
+        MathUtils.rotateBetweenVecs(rotationMatrix, UP, rotationAxis);
 
         createMeridians(6);
         createParallels(5);
@@ -44,7 +46,7 @@ public class Sphere {
 
 
     public void rotateAroundMainAxis(float angle) {
-        rotationMatrix.rotate((float)Math.toRadians(angle), new Vector3f(0, 1, 0));
+        rotationMatrix.rotate((float)Math.toRadians(angle), UP);
     }
 
 
@@ -63,14 +65,14 @@ public class Sphere {
             Vector3f vec = new Vector3f(0, 0, -1);
             rotMatrix.transformPosition(vec);
             elements.add(new SphereCircle(vec, 0));
-            rotMatrix.rotate((float)Math.toRadians(step), new Vector3f(0, 1, 0));
+            rotMatrix.rotate((float)Math.toRadians(step), UP);
         }
     }
 
 
     public void createParallels(int k) {
         for (float shift = 180f*k/(k+1) - 90; shift > -90f; shift -= 180f/(k+1)) {
-            elements.add(new SphereCircle(new Vector3f(0, 1, 0), shift));
+            elements.add(new SphereCircle(UP, shift));
         }
     }
 

@@ -1,5 +1,7 @@
 package com.example.celestialspheregeometry.model.sphere.elements.geometry;
 
+import android.opengl.GLES20;
+
 import com.example.celestialspheregeometry.model.sphere.elements.GeometricElement;
 import com.example.celestialspheregeometry.model.utils.MathUtils;
 import com.example.celestialspheregeometry.model.utils.Primitive;
@@ -34,13 +36,18 @@ public class Circle implements GeometricElement {
 
     public Primitive primitive = new Primitive();
 
+    public static Vector3f DEFAULT_ORT = new Vector3f(0, 1,0);
+
 
     public Circle(Vector3f center, Vector3f ort, float radius) {
-        primitive.setProgram(GLProgramType.DEFAULT);
-        primitive.setUniforms(Map.of("MVPMatrix", new Uniform(UniformType.MATRIX4f, new float[16])));
-        primitive.setPoints(360);
+        this.center = new Vector3f(center); this.ort = new Vector3f(ort); this.radius = radius;
 
-        this.center = center; this.ort = ort; this.radius = radius;
+        primitive.setProgram(GLProgramType.DEFAULT);
+        primitive.setPrimitiveType(GLES20.GL_LINE_LOOP);
+        primitive.setUniforms(Map.of("MVPMatrix", new Uniform(UniformType.MATRIX4f)));
+        primitive.setPoints(360);
+        primitive.setLineWidth(5.0f);
+
         generateVertices();
         generateModelMatrix();
 
@@ -73,7 +80,7 @@ public class Circle implements GeometricElement {
     void generateModelMatrix()
     {
         modelMatrix.setTranslation(center);
-        MathUtils.rotateBetweenVecs(modelMatrix, new Vector3f(0, 1, 0), ort);
+        MathUtils.rotateBetweenVecs(modelMatrix, DEFAULT_ORT, ort);
     }
 
 

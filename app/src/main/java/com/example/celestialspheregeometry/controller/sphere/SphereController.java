@@ -18,6 +18,8 @@ public class SphereController {
 
     public SphereScene sphereScene;
 
+    public Vector3f tmp1 = new Vector3f(), tmp2 = new Vector3f();
+
 
     public SphereController(SphereScene sphereScene) {
         this.sphereScene = sphereScene;
@@ -34,8 +36,7 @@ public class SphereController {
         distanceX /= swipeLength;
         distanceY /= swipeLength;
 
-        Vector3f rot = new Vector3f(0, 0, 1).cross(new Vector3f(-distanceX, distanceY, 0));
-
+        Vector3f rot = tmp1.set(0, 0, 1).cross(tmp2.set(-distanceX, distanceY, 0));
         sphereScene.getSphere().rotateAroundAxis(rot, swipeLength);
     }
 

@@ -14,10 +14,10 @@ public class MathUtils {
 
         from.cross(to, rot);
 
-        float angle = (float) Math.toDegrees(Math.acos(from.dot(to)));
+        float angle = (float) Math.acos(from.dot(to));
 
         if (rot.length() > 10e-6) {
-            matrix.rotate((float)Math.toRadians(angle), rot.normalize());
+            matrix.rotate(angle, rot.normalize());
         }
     }
 }

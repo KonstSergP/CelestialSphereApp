@@ -31,12 +31,12 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
     public final Context context;
     public final GLProgramManager programManager;
     public final SphereController sphereController;
+    public final Camera camera;
 
     private final Matrix4f viewMatrix = new Matrix4f();
     private final Matrix4f projectionMatrix = new Matrix4f();
     private final Matrix4f VPMatrix = new Matrix4f();
     private final Matrix4f MVPMatrix = new Matrix4f();
-    float[] tmpFloatArray = new float[16];
     List<Primitive> primitives = new ArrayList<>();
 
 
@@ -44,6 +44,9 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
         this.context = context;
         this.sphereController = sphereController;
         this.programManager = new GLProgramManager(context);
+
+        camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(0, 0, -1), new Vector3f(0, 1, 0));
+        camera.getViewMatrix(viewMatrix);
     }
 
 
@@ -55,10 +58,9 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceChanged(GL10 unused, int width, int height) {
-        GLES20.glViewport(0, 0, width, height);
-        Camera.getProjection(projectionMatrix, width, height);
-        Camera.getView(viewMatrix, new Vector3f(0, 0, 0), new Vector3f(0, 0, -1), new Vector3f(0, 1, 0));
-        Camera.updateViewProjMatrix(VPMatrix, viewMatrix, projectionMatrix);
+        camera.setWidthHeight(width, height);
+        camera.setProjectionMatrix(projectionMatrix);
+        projectionMatrix.mul(viewMatrix, VPMatrix);
     }
 
 
@@ -76,6 +78,8 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
     }
 
 
+
+
     public void drawPrimitives(List<Primitive> primitives) {
         primitives.forEach(this::drawPrimitive);
     }
@@ -89,7 +93,7 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
 
         loadUniforms(primitive.getProgram(), primitive.getUniforms());
 
-        draw(primitive.getPoints());
+        draw(primitive.getPrimitiveType(), primitive.getLineWidth(), primitive.getPoints());
 
         disableAttributes(primitive.getProgram(), primitive.getAttributes());
     }
@@ -110,6 +114,7 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
         }
     }
 
+
     private void disableAttributes(GLProgramType program, Map<String, FloatBuffer> attributes) {
         for (var entry: attributes.entrySet())
         {
@@ -117,6 +122,7 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
             GLES20.glDisableVertexAttribArray(location);
         }
     }
+
 
     private void loadUniforms(GLProgramType program, Map<String, Uniform> uniforms) {
         for (var entry: uniforms.entrySet())
@@ -130,8 +136,9 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
         }
     }
 
-    private void draw(int points) {
-        GLES20.glLineWidth(5.0f);
-        GLES20.glDrawArrays(GLES20.GL_LINE_LOOP, 0, points);
+
+    private void draw(int primitiveType, float lineWidth, int points) {
+        GLES20.glLineWidth(lineWidth);
+        GLES20.glDrawArrays(primitiveType, 0, points);
     }
 }
