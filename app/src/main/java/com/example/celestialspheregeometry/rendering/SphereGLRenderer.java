@@ -6,8 +6,8 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 
 import com.example.celestialspheregeometry.controller.sphere.SphereController;
-import com.example.celestialspheregeometry.model.utils.Primitive.Uniform;
 import com.example.celestialspheregeometry.model.utils.Primitive;
+import com.example.celestialspheregeometry.model.utils.Primitive.Uniform;
 import com.example.celestialspheregeometry.rendering.shaders.GLProgramManager;
 import com.example.celestialspheregeometry.rendering.shaders.GLProgramType;
 
@@ -99,12 +99,12 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
     }
 
 
-    public void enableProgram(GLProgramType program) {
+    private void enableProgram(GLProgramType program) {
         GLES20.glUseProgram(programManager.getProgram(program));
     }
 
 
-    public void enableAttributes(GLProgramType program, Map<String, FloatBuffer> attributes)
+    private void enableAttributes(GLProgramType program, Map<String, FloatBuffer> attributes)
     {
         for (var entry: attributes.entrySet())
         {

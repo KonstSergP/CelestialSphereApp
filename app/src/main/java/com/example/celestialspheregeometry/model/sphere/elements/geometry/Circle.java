@@ -15,7 +15,6 @@ import org.joml.Vector3f;
 import java.nio.FloatBuffer;
 import java.util.List;
 import java.util.Map;
-
 import lombok.Getter;
 
 
@@ -49,7 +48,7 @@ public class Circle implements GeometricElement {
         primitive.setLineWidth(5.0f);
 
         generateVertices();
-        generateModelMatrix();
+        setModelMatrix();
 
         primitive.setAttributes(Map.of("vPosition", vertexBuffer));
     }
@@ -77,7 +76,7 @@ public class Circle implements GeometricElement {
     }
 
 
-    void generateModelMatrix()
+    void setModelMatrix()
     {
         modelMatrix.setTranslation(center);
         MathUtils.rotateBetweenVecs(modelMatrix, DEFAULT_ORT, ort);

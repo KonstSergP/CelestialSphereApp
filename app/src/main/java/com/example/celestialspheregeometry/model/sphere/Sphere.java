@@ -1,9 +1,8 @@
 package com.example.celestialspheregeometry.model.sphere;
 
-import com.example.celestialspheregeometry.model.sphere.elements.astronomy.SphereCircle;
+import com.example.celestialspheregeometry.model.sphere.elements.sphere.SphereCircle;
 import com.example.celestialspheregeometry.model.sphere.elements.GeometricElement;
 import com.example.celestialspheregeometry.model.utils.MathUtils;
-import com.example.celestialspheregeometry.rendering.SphereGLRenderer;
 import com.example.celestialspheregeometry.model.utils.Primitive;
 
 import org.joml.Matrix4f;
