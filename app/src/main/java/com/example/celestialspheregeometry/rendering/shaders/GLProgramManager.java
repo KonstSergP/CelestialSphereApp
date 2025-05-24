@@ -10,8 +10,8 @@ import com.example.celestialspheregeometry.rendering.shaders.ShaderManager.Shade
 
 public class GLProgramManager {
 
-    public final ShaderManager shaderManager;
-    public final Map<GLProgramType, Integer> shaders = new HashMap<>();
+    private final ShaderManager shaderManager;
+    private final Map<GLProgramType, Integer> shaders = new HashMap<>();
 
 
     public GLProgramManager(Context context) {

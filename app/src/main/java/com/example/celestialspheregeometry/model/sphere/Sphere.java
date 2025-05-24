@@ -19,17 +19,17 @@ import lombok.Setter;
 @Getter
 public class Sphere {
 
-    public Vector3f center;
-    public Vector3f rotationAxis;
-    public float radius;
-    public final List<GeometricElement> elements = new ArrayList<>();
+    private Vector3f center;
+    private Vector3f rotationAxis;
+    private float radius;
+    private final List<GeometricElement> elements = new ArrayList<>();
 
-    public Matrix4f tmpMatrix = new Matrix4f();
-    public Matrix4f modelMatrix = new Matrix4f();
-    public Matrix4f rotationMatrix = new Matrix4f();
-    public Matrix4f resModelMatrix = new Matrix4f();
+    private final Matrix4f tmpMatrix = new Matrix4f();
+    private final Matrix4f modelMatrix = new Matrix4f();
+    private final Matrix4f rotationMatrix = new Matrix4f();
+    private final Matrix4f resModelMatrix = new Matrix4f();
 
-    public static Vector3f UP = new Vector3f(0, 1, 0);
+    public static final Vector3f UP = new Vector3f(0, 1, 0);
 
 
     public Sphere(Vector3f center, Vector3f axis, float r) {

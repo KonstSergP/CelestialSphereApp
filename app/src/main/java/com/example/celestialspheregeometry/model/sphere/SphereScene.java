@@ -15,8 +15,8 @@ import lombok.Getter;
 @Getter
 public class SphereScene {
 
-    Sphere sphere;
-    float prevTime = (float)(SystemClock.uptimeMillis() % 10000) / 10000;
+    private Sphere sphere;
+    private float prevTime = (float)(SystemClock.uptimeMillis() % 10000) / 10000;
 
 
     public SphereScene() {

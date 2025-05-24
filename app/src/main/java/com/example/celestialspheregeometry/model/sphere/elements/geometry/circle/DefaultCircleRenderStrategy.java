@@ -16,11 +16,11 @@ import java.util.Map;
 
 public class DefaultCircleRenderStrategy implements ElementRenderStrategy {
 
-    Circle circle;
+    private final Circle circle;
 
-    public FloatBuffer vertexBuffer;
-    public Primitive primitive = new Primitive();
-    public Matrix4f resModelMatrix = new Matrix4f();
+    private FloatBuffer vertexBuffer;
+    private final Primitive primitive = new Primitive();
+    private final Matrix4f resModelMatrix = new Matrix4f();
 
 
     public DefaultCircleRenderStrategy(Circle circle) {

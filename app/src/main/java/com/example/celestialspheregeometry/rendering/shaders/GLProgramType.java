@@ -17,6 +17,6 @@ public enum GLProgramType {
     }
 
 
-    final String vertexShader;
-    final String fragmentShader;
+    private final String vertexShader;
+    private final String fragmentShader;
 }

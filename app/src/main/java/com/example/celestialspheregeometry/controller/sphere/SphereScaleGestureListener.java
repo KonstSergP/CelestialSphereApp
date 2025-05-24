@@ -5,7 +5,7 @@ import android.view.ScaleGestureDetector;
 
 public class SphereScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
 
-    public SphereController sphereController;
+    private final SphereController sphereController;
 
 
     public SphereScaleGestureListener(SphereController sphereController) {

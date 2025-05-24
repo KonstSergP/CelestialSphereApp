@@ -15,11 +15,11 @@ import com.example.celestialspheregeometry.model.sphere.SphereScene;
 
 public class SphereGLSurfaceView extends GLSurfaceView {
 
-    public final SphereController sphereController;
-    public final GestureDetector gestureDetector;
-    public final ScaleGestureDetector scaleGestureDetector;
+    private final SphereController sphereController;
+    private final GestureDetector gestureDetector;
+    private final ScaleGestureDetector scaleGestureDetector;
 
-    public final SphereGLRenderer sphereGLRenderer;
+    private final SphereGLRenderer sphereGLRenderer;
 
 
     public SphereGLSurfaceView(Context context, SphereScene sphereScene, SphereController sphereController){

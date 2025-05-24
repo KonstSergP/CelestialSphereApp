@@ -6,7 +6,7 @@ import android.view.MotionEvent;
 
 public class SphereGestureListener extends GestureDetector.SimpleOnGestureListener {
 
-    public SphereController sphereController;
+    private final SphereController sphereController;
 
 
     public SphereGestureListener(SphereController sphereController) {

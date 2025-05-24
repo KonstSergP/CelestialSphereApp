@@ -10,7 +10,7 @@ import java.util.List;
 
 public abstract class GeometricElement {
 
-    public ElementRenderStrategy renderStrategy;
+    protected ElementRenderStrategy renderStrategy;
 
 
     public abstract void rotateAroundAxis(Vector3f axis, float angle);

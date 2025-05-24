@@ -5,11 +5,14 @@ import android.opengl.GLES20;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
+import lombok.Getter;
 
+
+@Getter
 public class Camera {
 
-    public int width, height;
-    public Vector3f eye, viewCenter, up;
+    private int width, height;
+    private final Vector3f eye, viewCenter, up;
 
 
     Camera(Vector3f eye, Vector3f viewCenter, Vector3f up) {

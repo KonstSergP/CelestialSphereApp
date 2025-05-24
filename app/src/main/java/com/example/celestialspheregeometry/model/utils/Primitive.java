@@ -17,17 +17,17 @@ import lombok.Setter;
 @Setter
 public class Primitive {
 
-    GLProgramType program;
+    private GLProgramType program;
 
-    int points;
+    private int points;
 
-    int primitiveType;
+    private int primitiveType;
 
-    float lineWidth;
+    private float lineWidth;
 
-    Map<String, FloatBuffer> attributes;
+    private Map<String, FloatBuffer> attributes;
 
-    Map<String, Uniform> uniforms;
+    private Map<String, Uniform> uniforms;
 
 
     @Getter

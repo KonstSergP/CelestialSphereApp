@@ -28,16 +28,16 @@ import lombok.Getter;
 @Getter
 public class SphereGLRenderer implements GLSurfaceView.Renderer {
 
-    public final Context context;
-    public final GLProgramManager programManager;
-    public final SphereController sphereController;
-    public final Camera camera;
+    private final Context context;
+    private final GLProgramManager programManager;
+    private final SphereController sphereController;
+    private final Camera camera;
 
     private final Matrix4f viewMatrix = new Matrix4f();
     private final Matrix4f projectionMatrix = new Matrix4f();
     private final Matrix4f VPMatrix = new Matrix4f();
     private final Matrix4f MVPMatrix = new Matrix4f();
-    List<Primitive> primitives = new ArrayList<>();
+    private final List<Primitive> primitives = new ArrayList<>();
 
 
     public SphereGLRenderer(Context context, SphereController sphereController) {

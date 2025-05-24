@@ -19,9 +19,9 @@ import lombok.Getter;
 
 public class ShaderManager {
 
-    public final String SHADER_DIRECTORY = "shaders";
-    public final Context context;
-    public final Map<Pair<ShaderType, String>, Integer> shaders = new HashMap<>();
+    public static final String SHADER_DIRECTORY = "shaders";
+    private final Context context;
+    private final Map<Pair<ShaderType, String>, Integer> shaders = new HashMap<>();
 
 
     public ShaderManager(Context context) {

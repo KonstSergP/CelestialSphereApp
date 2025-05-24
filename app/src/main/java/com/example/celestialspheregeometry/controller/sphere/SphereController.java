@@ -16,9 +16,9 @@ import lombok.Setter;
 @Setter
 public class SphereController {
 
-    public SphereScene sphereScene;
+    private final SphereScene sphereScene;
 
-    public Vector3f tmp1 = new Vector3f(), tmp2 = new Vector3f();
+    private final Vector3f tmp1 = new Vector3f(), tmp2 = new Vector3f();
 
 
     public SphereController(SphereScene sphereScene) {
