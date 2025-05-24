@@ -4,7 +4,7 @@ package com.example.celestialspheregeometry.model.sphere.elements.sphere;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-import com.example.celestialspheregeometry.model.sphere.elements.geometry.Circle;
+import com.example.celestialspheregeometry.model.sphere.elements.geometry.circle.Circle;
 
 import org.joml.Vector3f;
 

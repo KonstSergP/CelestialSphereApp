@@ -8,8 +8,14 @@ import org.joml.Vector3f;
 import java.util.List;
 
 
-public interface GeometricElement {
-    void rotateAroundAxis(Vector3f axis, float angle);
+public abstract class GeometricElement {
 
-    void getPrimitives(Matrix4f modelMatrix, List<Primitive> primitives);
+    public ElementRenderStrategy renderStrategy;
+
+
+    public abstract void rotateAroundAxis(Vector3f axis, float angle);
+
+    public void getPrimitives(Matrix4f modelMatrix, List<Primitive> primitives) {
+        renderStrategy.getPrimitives(modelMatrix, primitives);
+    }
 }
