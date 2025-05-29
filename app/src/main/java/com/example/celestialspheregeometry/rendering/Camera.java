@@ -39,7 +39,7 @@ public class Camera {
     }
 
 
-    public void getViewMatrix(Matrix4f viewMatrix) {
+    public void setViewMatrix(Matrix4f viewMatrix) {
         viewMatrix.setLookAt(eye, viewCenter, up);
     }
 }

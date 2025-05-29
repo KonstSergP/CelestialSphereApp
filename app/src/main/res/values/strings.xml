@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Celestial Sphere Geometry</string>
+    <string name="rotatingCheckBoxText">Вращать сферу</string>
+    <string name="rotatingSpeedText">Скорость:</string>
 </resources>

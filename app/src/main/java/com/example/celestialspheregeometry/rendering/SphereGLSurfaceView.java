@@ -3,6 +3,7 @@ package com.example.celestialspheregeometry.rendering;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -10,29 +11,21 @@ import android.view.ScaleGestureDetector;
 import com.example.celestialspheregeometry.controller.sphere.SphereController;
 import com.example.celestialspheregeometry.controller.sphere.SphereGestureListener;
 import com.example.celestialspheregeometry.controller.sphere.SphereScaleGestureListener;
-import com.example.celestialspheregeometry.model.sphere.SphereScene;
 
 
 public class SphereGLSurfaceView extends GLSurfaceView {
 
-    private final SphereController sphereController;
-    private final GestureDetector gestureDetector;
-    private final ScaleGestureDetector scaleGestureDetector;
+    private SphereController sphereController;
+    private GestureDetector gestureDetector;
+    private ScaleGestureDetector scaleGestureDetector;
 
-    private final SphereGLRenderer sphereGLRenderer;
+    private SphereGLRenderer sphereGLRenderer;
 
 
-    public SphereGLSurfaceView(Context context, SphereScene sphereScene, SphereController sphereController){
-        super(context);
+    public SphereGLSurfaceView(Context context, AttributeSet attrs) {
+        super(context, attrs);
 
         setEGLContextClientVersion(2);
-
-        this.sphereController = sphereController;
-        sphereGLRenderer = new SphereGLRenderer(context, sphereController);
-        gestureDetector = new GestureDetector(context, new SphereGestureListener(sphereController));
-        scaleGestureDetector = new ScaleGestureDetector(context, new SphereScaleGestureListener(sphereController));
-
-        setRenderer(sphereGLRenderer);
     }
 
 
@@ -41,5 +34,22 @@ public class SphereGLSurfaceView extends GLSurfaceView {
         boolean retVal = scaleGestureDetector.onTouchEvent(event);
         retVal = gestureDetector.onTouchEvent(event) || retVal;
         return retVal || super.onTouchEvent(event);
+    }
+
+
+    public void initController(SphereController controller) {
+        this.sphereController = controller;
+        commonInit(getContext());
+    }
+
+
+    private void commonInit(Context context) {
+        sphereGLRenderer = new SphereGLRenderer(context, sphereController);
+        sphereController.setRenderer(sphereGLRenderer);
+
+        gestureDetector = new GestureDetector(context, new SphereGestureListener(sphereController));
+        scaleGestureDetector = new ScaleGestureDetector(context, new SphereScaleGestureListener(sphereController));
+
+        setRenderer(sphereGLRenderer);
     }
 }

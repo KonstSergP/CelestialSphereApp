@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 public enum GLProgramType {
 
-    DEFAULT("default", "default"),
-    COLORED("default", "colored");
+    MINIMAL("MVPMultiplication", "white"),
+    COLORED("MVPMultiplication", "colored");
 
 
     GLProgramType(String vertexShader, String fragmentShader)

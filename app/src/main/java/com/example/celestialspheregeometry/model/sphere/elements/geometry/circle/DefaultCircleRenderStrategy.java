@@ -5,6 +5,7 @@ import android.opengl.GLES20;
 import com.example.celestialspheregeometry.model.sphere.elements.ElementRenderStrategy;
 import com.example.celestialspheregeometry.model.utils.BufferUtils;
 import com.example.celestialspheregeometry.model.utils.Primitive;
+import com.example.celestialspheregeometry.model.utils.Primitive.*;
 import com.example.celestialspheregeometry.rendering.shaders.GLProgramType;
 
 import org.joml.Matrix4f;
@@ -28,9 +29,11 @@ public class DefaultCircleRenderStrategy implements ElementRenderStrategy {
 
         generateVertices();
 
-        primitive.setProgram(GLProgramType.DEFAULT);
+        primitive.setProgram(GLProgramType.COLORED);
         primitive.setPrimitiveType(GLES20.GL_LINE_LOOP);
-        primitive.setUniforms(Map.of("MVPMatrix", new Primitive.Uniform(Primitive.UniformType.MATRIX4f)));
+        primitive.setUniforms(Map.of("MVPMatrix", new Uniform(UniformType.MATRIX4f),
+                "color", new Uniform(UniformType.VECTOR4f)));
+        var arr = primitive.getUniforms().get("color").getArray(); arr[0] = 1; arr[1] = 1; arr[2] = 1; arr[3] = 1;
         primitive.setPoints(360);
         primitive.setLineWidth(5.0f);
         primitive.setAttributes(Map.of("vPosition", vertexBuffer));

@@ -14,6 +14,8 @@ public abstract class GeometricElement {
 
 
     public abstract void rotateAroundAxis(Vector3f axis, float angle);
+    public abstract float distanceToLine(Vector3f start, Vector3f end);
+
 
     public void getPrimitives(Matrix4f modelMatrix, List<Primitive> primitives) {
         renderStrategy.getPrimitives(modelMatrix, primitives);

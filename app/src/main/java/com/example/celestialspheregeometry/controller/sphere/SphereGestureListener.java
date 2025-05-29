@@ -19,4 +19,11 @@ public class SphereGestureListener extends GestureDetector.SimpleOnGestureListen
         sphereController.handleScroll(distanceX, distanceY);
         return true;
     }
+
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        sphereController.handleTap(e.getX(), e.getY());
+        return true;
+    }
 }

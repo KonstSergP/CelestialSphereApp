@@ -46,7 +46,7 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
         this.programManager = new GLProgramManager(context);
 
         camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(0, 0, -1), new Vector3f(0, 1, 0));
-        camera.getViewMatrix(viewMatrix);
+        camera.setViewMatrix(viewMatrix);
     }
 
 
@@ -59,6 +59,7 @@ public class SphereGLRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceChanged(GL10 unused, int width, int height) {
         camera.setWidthHeight(width, height);
+        sphereController.setWidthHeight(width, height);
         camera.setProjectionMatrix(projectionMatrix);
         projectionMatrix.mul(viewMatrix, VPMatrix);
     }

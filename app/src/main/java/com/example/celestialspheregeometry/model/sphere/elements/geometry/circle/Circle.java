@@ -42,4 +42,25 @@ public class Circle extends GeometricElement {
         modelMatrix.setTranslation(center).scale(radius);
         MathUtils.rotateBetweenVecs(modelMatrix, DEFAULT_ORT, ort);
     }
+
+
+    @Override
+    public float distanceToLine(Vector3f start, Vector3f end) {
+        var matrix = new Matrix4f(modelMatrix).invert();
+        var firstLocal = matrix.transformPosition(new Vector3f(start));
+        var secondLocal = matrix.transformPosition(new Vector3f(end));
+        var s = new Vector3f(secondLocal).sub(firstLocal);
+        var m0 = new Vector3f();
+        var first = new Vector3f();
+
+        float mind = 10e9f;
+        for (int i = 0; i < 360; i++) {
+            double ang = Math.toRadians(i);
+            m0.set((float) Math.cos(ang), 0, (float) Math.sin(ang));
+            float d = first.set(firstLocal).sub(m0).cross(s).length() / s.length();
+            if (d < mind) mind = d;
+        }
+
+        return mind;
+    }
 }
