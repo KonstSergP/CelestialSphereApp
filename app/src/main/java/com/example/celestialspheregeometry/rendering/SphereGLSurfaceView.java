@@ -8,9 +8,9 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
-import com.example.celestialspheregeometry.controller.sphere.SphereController;
-import com.example.celestialspheregeometry.controller.sphere.SphereGestureListener;
-import com.example.celestialspheregeometry.controller.sphere.SphereScaleGestureListener;
+import com.example.celestialspheregeometry.controller.SphereController;
+import com.example.celestialspheregeometry.controller.SphereGestureListener;
+import com.example.celestialspheregeometry.controller.SphereScaleGestureListener;
 
 
 public class SphereGLSurfaceView extends GLSurfaceView {

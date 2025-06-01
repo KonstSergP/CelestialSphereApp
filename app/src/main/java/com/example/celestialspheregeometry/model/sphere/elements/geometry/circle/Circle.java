@@ -61,6 +61,6 @@ public class Circle extends GeometricElement {
             if (d < mind) mind = d;
         }
 
-        return mind;
+        return mind * radius;
     }
 }

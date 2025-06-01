@@ -88,7 +88,7 @@ public class Sphere {
     }
 
 
-    public void findIntersection(Vector3f first, Vector3f second) {
+    public GeometricElement getIntersectedElement(Vector3f first, Vector3f second) {
         var matrix = modelMatrix.mul(rotationMatrix, new Matrix4f()).invert();
         var firstLocal = matrix.transformPosition(new Vector3f(first));
         var secondLocal = matrix.transformPosition(new Vector3f(second));
@@ -99,6 +99,7 @@ public class Sphere {
             float d3 = element.distanceToLine(firstLocal, secondLocal);
             if (d3 < d2) {d2 = d3; el=element;}
         }
-        if (d2 < 0.05) elements.remove(el);
+        if (d2 < 0.05) return el;
+        return null;
     }
 }

@@ -6,7 +6,20 @@ import org.joml.Vector3f;
 
 public class MathUtils {
 
-    public static void rotateBetweenVecs(Matrix4f matrix, Vector3f from, Vector3f to)
+
+    private static final ThreadLocal<Matrix4f> ThreadTmp = new ThreadLocal() {
+        @Override
+        public Matrix4f initialValue() {
+            return new Matrix4f();
+        }
+    };
+
+
+    public static void rotateBetweenVecs(Vector3f vector, Vector3f from, Vector3f to) {
+        rotateBetweenVecs(ThreadTmp.get().identity(), from, to).transformPosition(vector);
+    }
+
+    public static Matrix4f rotateBetweenVecs(Matrix4f matrix, Vector3f from, Vector3f to)
     {
         Vector3f rot = new Vector3f();
         from = new Vector3f(from).normalize();
@@ -19,5 +32,7 @@ public class MathUtils {
         if (rot.length() > 10e-6) {
             matrix.rotate(angle, rot.normalize());
         }
+
+        return matrix;
     }
 }

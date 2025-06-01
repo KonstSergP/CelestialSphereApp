@@ -1,4 +1,4 @@
-package com.example.celestialspheregeometry.controller.sphere;
+package com.example.celestialspheregeometry.controller;
 
 import android.view.ScaleGestureDetector;
 

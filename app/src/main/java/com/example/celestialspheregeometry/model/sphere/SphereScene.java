@@ -1,18 +1,14 @@
 package com.example.celestialspheregeometry.model.sphere;
 
 import android.os.SystemClock;
-import android.util.Pair;
 
 import com.example.celestialspheregeometry.model.sphere.elements.GeometricElement;
 import com.example.celestialspheregeometry.model.utils.Primitive;
 
-import org.joml.GeometryUtils;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -28,7 +24,9 @@ public class SphereScene {
     private float rotationSpeedFactor = 1.0f;
 
 
-    public static float getCurrentRotation() {return (float)(SystemClock.uptimeMillis() % 10000) / 10000;}
+    public static float getCurrentRotation() {
+        return (float)(SystemClock.uptimeMillis() % 10000) / 10000;
+    }
 
 
     public SphereScene() {
@@ -60,7 +58,8 @@ public class SphereScene {
         sphere.getPrimitives(modelMatrix, primitives);
     }
 
-    public void findIntersection(Vector3f first, Vector3f second) {
-        sphere.findIntersection(first, second);
+
+    public GeometricElement getIntersectedElement(Vector3f first, Vector3f second) {
+        return sphere.getIntersectedElement(first, second);
     }
 }

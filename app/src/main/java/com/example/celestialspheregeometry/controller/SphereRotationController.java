@@ -1,14 +1,18 @@
-package com.example.celestialspheregeometry.controller.sphere;
+package com.example.celestialspheregeometry.controller;
+
 
 import android.widget.CheckBox;
 import android.widget.SeekBar;
 
 import com.example.celestialspheregeometry.model.sphere.SphereScene;
+import com.example.celestialspheregeometry.rendering.SphereGLRenderer;
 
 import org.joml.Vector3f;
 
+
 public class SphereRotationController {
 
+    private SphereGLRenderer sphereRenderer;
     private SphereScene sphereScene;
 
     private final Vector3f scrollTmp1 = new Vector3f(), scrollTmp2 = new Vector3f();
@@ -21,6 +25,11 @@ public class SphereRotationController {
 
     public SphereRotationController(SphereScene sphereScene) {
         this.sphereScene = sphereScene;
+    }
+
+
+    public void setRenderer(SphereGLRenderer sphereGLRenderer) {
+        this.sphereRenderer = sphereGLRenderer;
     }
 
 
@@ -41,10 +50,25 @@ public class SphereRotationController {
 
     public void handleScroll(float distanceX, float distanceY) {
         float swipeLength = (float) Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-        distanceX /= swipeLength;
+        distanceX /= swipeLength; distanceX = -distanceX;
         distanceY /= swipeLength;
 
-        Vector3f rot = scrollTmp1.set(0, 0, 1).cross(scrollTmp2.set(-distanceX, distanceY, 0));
+        var camera = sphereRenderer.getCamera();
+
+        var p0 = camera.getViewCenter();
+        var n = new Vector3f(p0).sub(camera.getEye());
+        var p1 = new Vector3f(p0).add(camera.getUp());
+        float D = -(n.x*p0.x + n.y*p0.y + n.z*p0.z);
+        float t = -(n.x*p1.x + n.y*p1.y + n.z*p1.z + D) / n.lengthSquared();
+        var upVector = p1.add(n.mul(t)).sub(p0).normalize();
+
+        var reversedSightVec = scrollTmp1.set(camera.getEye()).sub(camera.getViewCenter());
+        var rightVector = scrollTmp2.set(upVector).cross(reversedSightVec).normalize();
+
+        var shift = rightVector.mul(distanceX).add(upVector.mul(distanceY));
+
+        Vector3f rot = reversedSightVec.cross(shift).normalize();
+
         sphereScene.getSphere().rotateAroundAxis(rot, swipeLength);
     }
 

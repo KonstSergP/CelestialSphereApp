@@ -7,7 +7,7 @@ import android.widget.SeekBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.celestialspheregeometry.R;
-import com.example.celestialspheregeometry.controller.sphere.SphereController;
+import com.example.celestialspheregeometry.controller.SphereController;
 import com.example.celestialspheregeometry.model.sphere.SphereScene;
 import com.example.celestialspheregeometry.rendering.SphereGLSurfaceView;
 

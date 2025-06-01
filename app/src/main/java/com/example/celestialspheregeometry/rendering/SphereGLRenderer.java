@@ -5,7 +5,7 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 
-import com.example.celestialspheregeometry.controller.sphere.SphereController;
+import com.example.celestialspheregeometry.controller.SphereController;
 import com.example.celestialspheregeometry.model.utils.Primitive;
 import com.example.celestialspheregeometry.model.utils.Primitive.Uniform;
 import com.example.celestialspheregeometry.rendering.shaders.GLProgramManager;
